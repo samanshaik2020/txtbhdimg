@@ -1,0 +1,202 @@
+Nice 🔥 — you already have **strong core features**.
+To make this project feel **Canva-level + interview-ready + product-worthy**, here’s what you should add **next**, grouped by impact.
+
+---
+
+## 🚀 HIGH-IMPACT FEATURES (Must-Have Next)
+
+### 1️⃣ Text Effects (Big Visual Upgrade)
+
+Add **professional typography controls**:
+
+* Shadow (X, Y, blur, opacity)
+* Stroke (outline text)
+* Background highlight (pill / box behind text)
+* Line height & letter spacing
+
+👉 Makes thumbnails instantly “YouTube-ready”
+
+---
+
+### 2️⃣ Font Library + Google Fonts
+
+* 10–20 popular fonts (Poppins, Bebas Neue, Montserrat, Anton)
+* Font preview in dropdown
+* Bold / Italic toggle
+
+👉 Interviewers LOVE font handling
+
+---
+
+### 3️⃣ Canvas Presets (Creator-Focused)
+
+Add preset sizes:
+
+* Instagram Post (1:1)
+* Instagram Story (9:16)
+* YouTube Thumbnail (16:9)
+* Twitter / LinkedIn post
+
+👉 This makes it usable, not just technical
+
+---
+
+### 4️⃣ Layer Panel (Mini Photoshop)
+
+Add a **Layers tab**:
+
+* Background
+* Text 1, Text 2…
+* Foreground (subject)
+* Toggle visibility
+* Lock layer
+
+👉 Shows strong UI/UX thinking
+
+---
+
+## 🎨 MID-LEVEL FEATURES (Canva Feel)
+
+### 5️⃣ Text Snapping & Guides
+
+* Snap text to center
+* Snap to edges
+* Show alignment guides
+
+👉 Small thing, HUGE polish
+
+---
+
+### 6️⃣ Blend Modes (Advanced but Sexy)
+
+For text layer:
+
+* Multiply
+* Overlay
+* Screen
+* Hard light
+
+👉 Makes “text behind image” effects insane
+
+---
+
+### 7️⃣ Image Adjustments
+
+Add sliders for:
+
+* Brightness
+* Contrast
+* Saturation
+* Blur (background only)
+
+👉 Professional photo editor vibes
+
+---
+
+### 8️⃣ Undo / Redo
+
+* Ctrl + Z
+* Ctrl + Shift + Z
+* Stack-based history
+
+👉 Interview gold ⭐
+
+---
+
+## 📤 EXPORT & PERFORMANCE (Very Important)
+
+### 9️⃣ Export Options
+
+* PNG (transparent background)
+* JPG (compressed)
+* Scale: 1x / 2x / 4x
+* Background on/off
+
+👉 Makes it production-ready
+
+---
+
+### 🔟 Loading & Processing UX
+
+* Skeleton while background removal runs
+* Progress bar
+* “AI Processing…” badge
+
+👉 Shows product maturity
+
+---
+
+## 🧠 ADVANCED / WOW FEATURES (Optional)
+
+### 11️⃣ Text Masking (Next Level)
+
+* Text cut-out from image
+* Subject inside text
+* Inverted mask
+
+👉 This will blow minds
+
+---
+
+### 12️⃣ Preset Templates
+
+* Thumbnail presets
+* Quote presets
+* Poster layouts
+
+👉 Turns editor into a product
+
+---
+
+### 13️⃣ Save Project (Local)
+
+* Save to LocalStorage
+* Load previous design
+* Autosave
+
+👉 Shows real app thinking
+
+---
+
+### 14️⃣ Keyboard Shortcuts
+
+* Delete text
+* Duplicate text (Ctrl + D)
+* Arrow key movement
+* Shift for fast move
+
+👉 Pro-tool feel
+
+---
+
+## 🧠 AI-POWERED ADD-ONS (Future)
+
+* AI text suggestions for thumbnails
+* AI color palette from image
+* Auto text positioning
+* AI font pairing
+
+---
+
+## 🏆 FINAL FEATURE LIST (Interview-Ready)
+
+If you stop at this set 👇
+You’re already **top-tier**:
+
+✔ Dark/Light mode
+✔ AI background removal
+✔ Text behind image illusion
+✔ Font & text controls
+✔ Opacity control
+✔ Export PNG
+✔ Canvas presets
+✔ Text effects
+✔ Layer panel
+✔ Undo / Redo
+
+---
+
+### 💡 My Honest Advice
+
+Don’t add **everything**.
+Build **10–12 features perfectly** instead of 25 half-done.

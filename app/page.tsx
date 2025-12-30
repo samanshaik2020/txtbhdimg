@@ -1,65 +1,393 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  Sparkles,
+  Layers,
+  Type,
+  Wand2,
+  Download,
+  Zap,
+  MousePointer,
+  Moon,
+  Sun,
+  ArrowRight,
+  Check,
+  Play,
+  Github,
+  Twitter,
+  Minimize2,
+  Scissors,
+  RotateCw,
+  Maximize2,
+  ImageMinus,
+  Wrench,
+  FileType,
+} from "lucide-react";
+
+export default function LandingPage() {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem("theme");
+      return saved ? saved === "dark" : true;
+    }
+    return true;
+  });
+  const [mounted, setMounted] = useState(() => typeof window !== 'undefined');
+
+  useEffect(() => {
+    if (mounted) {
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(isDark ? "dark" : "light");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    }
+  }, [isDark, mounted]);
+
+  if (!mounted) return null;
+
+  const features = [
+    {
+      icon: <Wand2 className="w-6 h-6" />,
+      title: "AI Background Removal",
+      description: "Automatically separate subjects from backgrounds using cutting-edge AI technology.",
+    },
+    {
+      icon: <Layers className="w-6 h-6" />,
+      title: "Layered Editing",
+      description: "Text magically appears behind subjects. Full control over layer visibility and ordering.",
+    },
+    {
+      icon: <Type className="w-6 h-6" />,
+      title: "15+ Google Fonts",
+      description: "Choose from Bebas Neue, Poppins, Montserrat, and more with shadows & strokes.",
+    },
+    {
+      icon: <MousePointer className="w-6 h-6" />,
+      title: "Drag & Drop",
+      description: "Intuitive canvas with snapping guides, transform handles, and keyboard shortcuts.",
+    },
+    {
+      icon: <Zap className="w-6 h-6" />,
+      title: "Canvas Presets",
+      description: "Ready-made sizes for YouTube, Instagram, Twitter, LinkedIn, and more.",
+    },
+    {
+      icon: <Download className="w-6 h-6" />,
+      title: "High-Quality Export",
+      description: "Download your designs as crisp 2x resolution PNG images.",
+    },
+  ];
+
+  const tools = [
+    {
+      icon: <Minimize2 className="w-7 h-7" />,
+      title: "Compress Image",
+      description: "Reduce file size while maintaining quality",
+      href: "/tools/compress",
+      color: "from-emerald-500 to-teal-500",
+      shadowColor: "shadow-emerald-500/25",
+    },
+    {
+      icon: <ImageMinus className="w-7 h-7" />,
+      title: "Remove Background",
+      description: "AI-powered background removal",
+      href: "/tools/remove-background",
+      color: "from-violet-500 to-purple-500",
+      shadowColor: "shadow-violet-500/25",
+    },
+    {
+      icon: <Maximize2 className="w-7 h-7" />,
+      title: "Resize Image",
+      description: "Change dimensions to any size",
+      href: "/tools/resize",
+      color: "from-blue-500 to-cyan-500",
+      shadowColor: "shadow-blue-500/25",
+    },
+    {
+      icon: <Scissors className="w-7 h-7" />,
+      title: "Crop Image",
+      description: "Cut and frame your images",
+      href: "/tools/crop",
+      color: "from-orange-500 to-amber-500",
+      shadowColor: "shadow-orange-500/25",
+    },
+    {
+      icon: <RotateCw className="w-7 h-7" />,
+      title: "Rotate Image",
+      description: "Rotate and flip images easily",
+      href: "/tools/rotate",
+      color: "from-pink-500 to-rose-500",
+      shadowColor: "shadow-pink-500/25",
+    },
+    {
+      icon: <FileType className="w-7 h-7" />,
+      title: "Convert Format",
+      description: "PNG, JPG, WEBP, AVIF conversion",
+      href: "/tools/convert",
+      color: "from-indigo-500 to-purple-500",
+      shadowColor: "shadow-indigo-500/25",
+    },
+  ];
+
+  const steps = [
+    { step: "01", title: "Upload Image", description: "Drop any image with a clear subject" },
+    { step: "02", title: "Add Text", description: "Type your message and customize style" },
+    { step: "03", title: "Watch Magic", description: "Text appears behind the subject" },
+    { step: "04", title: "Export", description: "Download your stunning creation" },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className={`min-h-screen transition-colors ${isDark ? "bg-zinc-950 text-white" : "bg-white text-zinc-900"}`}>
+      {/* Navbar */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-xl ${isDark ? "bg-zinc-950/80 border-zinc-800" : "bg-white/80 border-zinc-200"
+        }`}>
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/25">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-lg">TextBehind</span>
+          </div>
+          <div className="hidden md:flex items-center gap-6">
+            <a href="#features" className={`text-sm font-medium transition-colors ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
+              Features
+            </a>
+            <a href="#tools" className={`text-sm font-medium transition-colors ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
+              Tools
+            </a>
+            <a href="#how-it-works" className={`text-sm font-medium transition-colors ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
+              How It Works
+            </a>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <Link
+              href="/editor"
+              className="px-5 py-2 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white text-sm font-medium transition-all hover:shadow-lg hover:shadow-violet-500/25"
             >
-              Learning
-            </a>{" "}
-            center.
+              Open Editor
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto">
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 ${isDark ? "bg-violet-500/10 text-violet-400 border border-violet-500/20" : "bg-violet-50 text-violet-600 border border-violet-200"
+              }`}>
+              <Sparkles className="w-4 h-4" />
+              AI-Powered Design Tool
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+              Create{" "}
+              <span className="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+                Text Behind
+              </span>
+              <br />
+              Image Effects
+            </h1>
+
+            <p className={`text-xl md:text-2xl mb-10 leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              Make your designs stand out. Our AI automatically removes backgrounds
+              so your text appears magically behind any subject.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/editor"
+                className="group flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white font-semibold text-lg transition-all hover:shadow-xl hover:shadow-violet-500/30 hover:scale-105"
+              >
+                Start Creating Free
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <button className={`flex items-center gap-2 px-6 py-4 rounded-full font-medium transition-colors ${isDark ? "bg-zinc-800 hover:bg-zinc-700" : "bg-zinc-100 hover:bg-zinc-200"
+                }`}>
+                <Play className="w-5 h-5" />
+                Watch Demo
+              </button>
+            </div>
+
+            <div className={`flex items-center justify-center gap-6 mt-10 text-sm ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-emerald-500" /> No sign-up required
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-emerald-500" /> 100% free
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-emerald-500" /> Works in browser
+              </span>
+            </div>
+          </div>
+
+          {/* Hero Preview */}
+          <div className="mt-16 relative">
+            <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? "from-zinc-950" : "from-white"} to-transparent z-10 pointer-events-none h-32 bottom-0 top-auto`} />
+            <div className={`rounded-2xl border overflow-hidden shadow-2xl ${isDark ? "border-zinc-800 shadow-violet-500/10" : "border-zinc-200 shadow-zinc-500/10"
+              }`}>
+              <div className={`h-10 flex items-center gap-2 px-4 border-b ${isDark ? "bg-zinc-900 border-zinc-800" : "bg-zinc-50 border-zinc-200"}`}>
+                <div className="w-3 h-3 rounded-full bg-red-500" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                <div className="w-3 h-3 rounded-full bg-green-500" />
+              </div>
+              <div className={`aspect-video flex items-center justify-center ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
+                <div className="text-center">
+                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-violet-500/30">
+                    <Sparkles className="w-12 h-12 text-white" />
+                  </div>
+                  <p className={`text-lg font-medium ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+                    Your stunning designs appear here
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tools Section */}
+      <section id="tools" className={`py-24 px-6 ${isDark ? "bg-zinc-900/50" : "bg-zinc-50"}`}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-4 ${isDark ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-emerald-50 text-emerald-600 border border-emerald-200"
+              }`}>
+              <Wrench className="w-4 h-4" />
+              Free Image Tools
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">More Tools for You</h2>
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              Powerful image editing tools, all free and running in your browser
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tools.map((tool, idx) => (
+              <Link
+                key={idx}
+                href={tool.href}
+                className={`group p-6 rounded-2xl border transition-all hover:scale-[1.02] hover:-translate-y-1 ${isDark
+                  ? "bg-zinc-900 border-zinc-800 hover:border-zinc-700"
+                  : "bg-white border-zinc-200 hover:border-zinc-300"
+                  }`}
+              >
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4 shadow-lg ${tool.shadowColor} group-hover:scale-110 transition-transform`}>
+                  <div className="text-white">{tool.icon}</div>
+                </div>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-violet-500 transition-colors">{tool.title}</h3>
+                <p className={isDark ? "text-zinc-400" : "text-zinc-600"}>{tool.description}</p>
+                <div className={`flex items-center gap-1 mt-4 text-sm font-medium ${isDark ? "text-zinc-500" : "text-zinc-500"} group-hover:text-violet-500 transition-colors`}>
+                  Try it free <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Text Behind Image Features</h2>
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              Everything you need to create stunning text-behind-image designs
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
+                className={`p-6 rounded-2xl border transition-all hover:scale-[1.02] ${isDark
+                  ? "bg-zinc-900 border-zinc-800 hover:border-violet-500/50"
+                  : "bg-white border-zinc-200 hover:border-violet-500/50"
+                  }`}
+              >
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 flex items-center justify-center mb-4 text-violet-500">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className={isDark ? "text-zinc-400" : "text-zinc-600"}>{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section id="how-it-works" className={`py-24 px-6 ${isDark ? "bg-zinc-900/50" : "bg-zinc-50"}`}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">How It Works</h2>
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              Create professional designs in just 4 simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-8">
+            {steps.map((step, idx) => (
+              <div key={idx} className="text-center">
+                <div className="text-6xl font-bold bg-gradient-to-br from-violet-500 to-fuchsia-500 bg-clip-text text-transparent mb-4">
+                  {step.step}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className={isDark ? "text-zinc-400" : "text-zinc-600"}>{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            Ready to Create Something Amazing?
+          </h2>
+          <p className={`text-xl mb-10 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+            Join thousands of creators making stunning designs with TextBehind
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/editor"
+            className="group inline-flex items-center gap-2 px-10 py-5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white font-semibold text-xl transition-all hover:shadow-xl hover:shadow-violet-500/30 hover:scale-105"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Launch Editor
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* Footer */}
+      <footer className={`py-12 px-6 border-t ${isDark ? "border-zinc-800" : "border-zinc-200"}`}>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-semibold">TextBehind</span>
+          </div>
+          <p className={`text-sm ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>
+            Built with ❤️ using Next.js, React-Konva & AI
+          </p>
+          <div className="flex items-center gap-4">
+            <a href="#" className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}>
+              <Github className="w-5 h-5" />
+            </a>
+            <a href="#" className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}>
+              <Twitter className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

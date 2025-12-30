@@ -1,0 +1,213 @@
+Got it 👍
+Below is a **clear, Canva-style process + page layout explanation** — focused on **how the page looks** and **how the flow works**, not code.
+
+---
+
+## 🧠 Overall Idea (Canva-like Editor)
+
+The app is a **two-panel editor**:
+
+* **Left Side → Controls / Settings**
+* **Right Side → Live Canvas (Image + Text)**
+
+Everything you change on the left updates the canvas instantly on the right.
+
+---
+
+## 🖥️ Page Layout Structure
+
+![Image](https://www.c-sharpcorner.com/article/canva-sidebar-and-its-tabs-learn-canva/Images/Canva%20Side%20Panel.png)
+
+![Image](https://www.usu.edu/teach/images/design-plus-sidebar-tabs.png)
+
+![Image](https://help.figma.com/hc/article_attachments/24376974688663)
+
+![Image](https://cdn.pokecut.com/resource/webseo/ogImage/ogImage_en_textbehindimage.png)
+
+![Image](https://i.imgur.com/dwyZTxu.png)
+
+### 🔹 Layout Split (Horizontal)
+
+```
+┌─────────────────────┬───────────────────────────────┐
+│  LEFT SIDEBAR       │   RIGHT WORKSPACE              │
+│  (Controls)         │   (Canvas Preview)             │
+│                     │                               │
+│  Upload Image       │        ┌───────────────┐      │
+│  Add Text           │        │               │      │
+│  Font Settings      │        │   CANVAS      │      │
+│  Opacity Slider     │        │   (Konva)     │      │
+│  Layers (optional)  │        │               │      │
+│                     │        └───────────────┘      │
+└─────────────────────┴───────────────────────────────┘
+```
+
+---
+
+## 🧩 LEFT SIDE – Settings Panel (Like Canva)
+
+This panel is **fixed width** and scrollable.
+
+### 1️⃣ Image Section
+
+* Upload image button
+* Shows upload progress
+* Automatically:
+
+  * Saves original image
+  * Starts background removal
+* Optional:
+
+  * Reset image
+  * Replace image
+
+---
+
+### 2️⃣ Text Section
+
+* Add new text button
+* Text list (like layers)
+* Select active text
+
+Each text item has:
+
+* Text input
+* Font size
+* Font weight
+* Color picker
+* Letter spacing
+* Alignment (left / center / right)
+
+---
+
+### 3️⃣ Foreground (Subject) Controls
+
+* Opacity slider (0 → 1)
+* Toggle visibility
+* Helps fine-tune “behind text” illusion
+
+---
+
+### 4️⃣ (Optional) Layer Manager
+
+* Background
+* Text(s)
+* Foreground subject
+* Reorder text layers only
+
+---
+
+## 🎨 RIGHT SIDE – Canvas Workspace
+
+This is the **visual editor**, powered by **react-konva**.
+
+### What the user sees:
+
+* Centered canvas
+* Fixed aspect ratio (Instagram / YouTube / Custom)
+* Light checker background (to show transparency)
+* Zoom in / zoom out
+
+---
+
+### 🧠 Canvas Layer Order (Critical)
+
+```
+TOP
+┌─────────────────────────────┐
+│ Foreground Image (Subject)  │  ← transparent PNG
+│ listening = false           │
+└─────────────────────────────┘
+┌─────────────────────────────┐
+│ Editable Text               │  ← draggable, selectable
+└─────────────────────────────┘
+┌─────────────────────────────┐
+│ Original Image (Background) │
+└─────────────────────────────┘
+BOTTOM
+```
+
+This order **never changes**.
+
+---
+
+## 🖱️ Interaction Flow (Feels Like Canva)
+
+### User Actions → What Happens
+
+**Upload Image**
+→ Background image loads
+→ Foreground image is generated
+→ Canvas updates automatically
+
+**Add Text**
+→ Text appears in center
+→ User drags it
+→ Text visually goes *behind subject*
+
+**Drag Text**
+→ Foreground does NOT block interaction
+→ Text moves freely
+
+**Adjust Opacity**
+→ Subject fades in/out
+→ Text visibility improves
+
+---
+
+## 🧠 Why This Feels Like Canva
+
+* Instant visual feedback
+* No “apply” buttons
+* Everything is draggable
+* Sidebar controls affect selected element only
+* Canvas is always visible
+
+---
+
+## 📐 Responsive Behavior
+
+### Desktop
+
+* Sidebar left (300–360px)
+* Canvas fills remaining space
+
+### Tablet
+
+* Sidebar collapsible
+* Canvas centered
+
+### Mobile (Optional)
+
+* Bottom sheet controls
+* Canvas on top
+
+---
+
+## 🔄 Full User Flow (End-to-End)
+
+1. User opens editor
+2. Uploads image
+3. AI removes background
+4. User adds text
+5. Text appears behind subject
+6. User adjusts font & opacity
+7. Final design looks “professional”
+8. Export image (PNG)
+
+---
+
+## ✨ Mental Model (Simple)
+
+> **Canva UI + Photoshop layering + AI background removal**
+
+---
+
+If you want next, I can give you:
+
+* 📁 Exact **folder structure**
+* 🧠 **Zustand state flow diagram**
+* 🎨 **shadcn UI components mapping**
+* 🚀 **Export logic explanation**
+
+Just tell me what’s next.
