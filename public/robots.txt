@@ -1,0 +1,14 @@
+# Robots.txt for TextBehindImage.in
+# https://textbehindimage.in
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://textbehindimage.in/sitemap.xml
+
+# Crawl delay (optional - be respectful to crawlers)
+Crawl-delay: 1
+
+# Disallow admin/api routes from indexing
+Disallow: /api/

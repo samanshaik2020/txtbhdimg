@@ -188,17 +188,16 @@ export default function LandingPage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-              Create{" "}
-              <span className="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
-                Text Behind
-              </span>
+              Add Text Behind
               <br />
-              Image Effects
+              <span className="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+                Image Online
+              </span>
             </h1>
 
-            <p className={`text-xl md:text-2xl mb-10 leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
-              Make your designs stand out. Our AI automatically removes backgrounds
-              so your text appears magically behind any subject.
+            <p className={`text-xl md:text-2xl mb-10 leading-relaxed max-w-2xl mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              The professional way to add text behind subjects.
+              <span className="hidden md:inline"> Automatically remove backgrounds, manage layers, and create stunning visuals in seconds.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
