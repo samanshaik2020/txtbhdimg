@@ -27,14 +27,17 @@ import {
 } from "lucide-react";
 
 export default function LandingPage() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem("theme");
-      return saved ? saved === "dark" : true;
+  const [isDark, setIsDark] = useState(true); // Default to dark, will be updated on client
+  const [mounted, setMounted] = useState(false);
+
+  // Handle mounting and theme initialization
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem("theme");
+    if (saved) {
+      setIsDark(saved === "dark");
     }
-    return true;
-  });
-  const [mounted, setMounted] = useState(() => typeof window !== 'undefined');
+  }, []);
 
   useEffect(() => {
     if (mounted) {
@@ -159,6 +162,9 @@ export default function LandingPage() {
             <a href="#how-it-works" className={`text-sm font-medium transition-colors ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
               How It Works
             </a>
+            <Link href="/blog" className={`text-sm font-medium transition-colors ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
+              Blog
+            </Link>
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -375,7 +381,7 @@ export default function LandingPage() {
             <span className="font-semibold">TextBehind</span>
           </div>
           <p className={`text-sm ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>
-            Built with ❤️ using Next.js, React-Konva & AI
+            © 2025 TextBehind. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a href="#" className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}>

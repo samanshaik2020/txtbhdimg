@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
-import { ArrowLeft, Download, Upload, FileType, Sun, Moon, Trash2, ArrowRight } from "lucide-react";
+import { Download, Upload, Trash2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ToolsNavbar from "@/components/ToolsNavbar";
+import { useSharedImage } from "@/components/SharedImageContext";
 
 type ImageFormat = "png" | "jpg" | "webp" | "avif";
 
@@ -31,14 +32,9 @@ const ALLOWED_CONVERSIONS: Record<string, ImageFormat[]> = {
 };
 
 export default function ConvertImagePage() {
-    const [isDark, setIsDark] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem("theme");
-            return saved ? saved === "dark" : true;
-        }
-        return true;
-    });
-    const [mounted, setMounted] = useState(() => typeof window !== 'undefined');
+    const [isDark, setIsDark] = useState(true);
+    const [mounted, setMounted] = useState(false);
+    const { sharedImage, setSharedImage, clearSharedImage } = useSharedImage();
     const [image, setImage] = useState<string | null>(null);
     const [originalFile, setOriginalFile] = useState<File | null>(null);
     const [sourceFormat, setSourceFormat] = useState<string>("");
@@ -49,10 +45,33 @@ export default function ConvertImagePage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    // Handle mounting and theme initialization
+    useEffect(() => {
+        setMounted(true);
+        const saved = localStorage.getItem("theme");
+        if (saved) {
+            setIsDark(saved === "dark");
+        }
+    }, []);
+
+    // Load shared image on mount
+    useEffect(() => {
+        if (mounted && sharedImage && !image) {
+            setImage(sharedImage);
+            // Default to PNG source format when loading shared image
+            setSourceFormat("image/png");
+            const allowed = getAllowedFormats("image/png");
+            if (allowed.length > 0) {
+                setTargetFormat(allowed[0]);
+            }
+        }
+    }, [mounted, sharedImage, image]);
+
     useEffect(() => {
         if (mounted) {
             document.documentElement.classList.remove("light", "dark");
             document.documentElement.classList.add(isDark ? "dark" : "light");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
         }
     }, [isDark, mounted]);
 
@@ -79,7 +98,9 @@ export default function ConvertImagePage() {
 
         setOriginalFile(file);
         setSourceFormat(file.type);
-        setImage(URL.createObjectURL(file));
+        const url = URL.createObjectURL(file);
+        setImage(url);
+        setSharedImage(url); // Share the image with other tools
         setConvertedImage(null);
 
         // Set default target format
@@ -152,25 +173,7 @@ export default function ConvertImagePage() {
         <div className={`h-screen flex flex-col overflow-hidden ${isDark ? "bg-zinc-950 text-white" : "bg-white text-zinc-900"}`}>
             <canvas ref={canvasRef} className="hidden" />
 
-            <nav className={`shrink-0 border-b ${isDark ? "border-zinc-800" : "border-zinc-200"}`}>
-                <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Link href="/" className={`flex items-center gap-2 text-sm ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-zinc-900"}`}>
-                            <ArrowLeft className="w-4 h-4" /> Back
-                        </Link>
-                        <div className="w-px h-5 bg-zinc-700" />
-                        <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-                                <FileType className="w-3.5 h-3.5 text-white" />
-                            </div>
-                            <span className="font-semibold text-sm">Convert Format</span>
-                        </div>
-                    </div>
-                    <button onClick={() => setIsDark(!isDark)} className={`p-2 rounded-lg ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}>
-                        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                    </button>
-                </div>
-            </nav>
+            <ToolsNavbar isDark={isDark} onThemeToggle={() => setIsDark(!isDark)} />
 
             <main className="flex-1 flex items-center justify-center p-4 overflow-hidden">
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -243,7 +246,7 @@ export default function ConvertImagePage() {
                             <Button onClick={downloadImage} disabled={!convertedImage || isConverting} className="h-10 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-sm mt-auto">
                                 <Download className="w-4 h-4 mr-1" /> Download {targetFormat.toUpperCase()}
                             </Button>
-                            <Button onClick={() => { setImage(null); setConvertedImage(null); }} variant="outline" className={`h-9 rounded-lg ${isDark ? "border-zinc-700" : ""}`}>
+                            <Button onClick={() => { setImage(null); setConvertedImage(null); clearSharedImage(); }} variant="outline" className={`h-9 rounded-lg ${isDark ? "border-zinc-700" : ""}`}>
                                 <Trash2 className="w-4 h-4 mr-1" /> Reset
                             </Button>
                         </div>
