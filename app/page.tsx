@@ -244,14 +244,36 @@ export default function LandingPage() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                 <div className="w-3 h-3 rounded-full bg-green-500" />
               </div>
-              <div className={`aspect-video flex items-center justify-center ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-violet-500/30">
-                    <Sparkles className="w-12 h-12 text-white" />
+              <div className={`flex items-center justify-center p-8 ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
+                <div className="flex items-center justify-center gap-8 w-full">
+                  {/* Before Image */}
+                  <div className="flex flex-col items-center gap-3 flex-1">
+                    <div className="relative rounded-xl overflow-hidden shadow-2xl shadow-zinc-900/50">
+                      <img
+                        src="/car-normal.png"
+                        alt="Original car image"
+                        className="w-full h-auto object-cover"
+                      />
+                    </div>
+                    <span className={`text-sm font-medium ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>Before</span>
                   </div>
-                  <p className={`text-lg font-medium ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
-                    Your stunning designs appear here
-                  </p>
+
+                  {/* Arrow indicator */}
+                  <div className={`flex-shrink-0 ${isDark ? "text-zinc-600" : "text-zinc-400"}`}>
+                    <ArrowRight className="w-8 h-8" />
+                  </div>
+
+                  {/* After Image */}
+                  <div className="flex flex-col items-center gap-3 flex-1">
+                    <div className="relative rounded-xl overflow-hidden shadow-2xl shadow-violet-500/30">
+                      <img
+                        src="/car-edited.png"
+                        alt="Edited car image with text behind"
+                        className="w-full h-auto object-cover"
+                      />
+                    </div>
+                    <span className={`text-sm font-medium ${isDark ? "text-violet-400" : "text-violet-600"}`}>After</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -353,8 +375,8 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-24 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Ready to Create Something Amazing?
           </h2>
@@ -368,6 +390,35 @@ export default function LandingPage() {
             Launch Editor
             <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </Link>
+
+          {/* Showcase Images */}
+          <div className="mt-20 flex flex-col items-center gap-12">
+            {/* Top row - 2 images */}
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-10 w-full">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/20 hover:scale-[1.02] transition-transform duration-500">
+                <img
+                  src="/text-behind-image (6).png"
+                  alt="Text behind image example 1"
+                  className="w-full max-w-2xl h-auto"
+                />
+              </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-fuchsia-500/20 hover:scale-[1.02] transition-transform duration-500">
+                <img
+                  src="/text-behind-image (8).png"
+                  alt="Text behind image example 2"
+                  className="w-full max-w-2xl h-auto"
+                />
+              </div>
+            </div>
+            {/* Bottom row - 1 centered extra large image */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/20 hover:scale-[1.02] transition-transform duration-500">
+              <img
+                src="/text-behind-image (10).png"
+                alt="Text behind image example 3"
+                className="w-full max-w-3xl h-auto"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
