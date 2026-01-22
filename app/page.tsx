@@ -62,8 +62,8 @@ export default function LandingPage() {
     },
     {
       icon: <Type className="w-6 h-6" />,
-      title: "15+ Google Fonts",
-      description: "Choose from Bebas Neue, Poppins, Montserrat, and more with shadows & strokes.",
+      title: "35+ Google Fonts",
+      description: "Choose from Bebas Neue, Poppins, Pacifico, Bangers, and many more with shadows & strokes.",
     },
     {
       icon: <MousePointer className="w-6 h-6" />,
