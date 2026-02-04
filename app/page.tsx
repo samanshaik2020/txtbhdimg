@@ -281,6 +281,71 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Choose Your Tool Section */}
+      <section id="choose-tool" className={`py-20 px-6 ${isDark ? "bg-zinc-900/50" : "bg-zinc-50"}`}>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-4 ${isDark ? "bg-violet-500/10 text-violet-400 border border-violet-500/20" : "bg-violet-50 text-violet-600 border border-violet-200"
+              }`}>
+              <Sparkles className="w-4 h-4" />
+              Choose Your Tool
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Two Powerful Text Effects</h2>
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+              Select the effect that fits your creative vision
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Text Behind Image Card */}
+            <Link
+              href="/editor"
+              className={`group relative p-8 rounded-3xl border-2 transition-all hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${isDark
+                ? "bg-zinc-900 border-zinc-800 hover:border-violet-500"
+                : "bg-white border-zinc-200 hover:border-violet-500"
+                }`}
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 blur-3xl" />
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mb-5 shadow-lg shadow-violet-500/25 group-hover:scale-110 transition-transform">
+                  <Layers className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Text Behind Image</h3>
+                <p className={`text-base mb-6 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+                  Your text magically appears behind the subject. AI removes the background and layers text underneath.
+                </p>
+                <div className={`flex items-center gap-2 text-sm font-semibold ${isDark ? "text-violet-400" : "text-violet-600"} group-hover:gap-3 transition-all`}>
+                  Open Editor <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </Link>
+
+            {/* Text Inside Image Card */}
+            <Link
+              href="/editor/text-inside"
+              className={`group relative p-8 rounded-3xl border-2 transition-all hover:scale-[1.02] hover:-translate-y-1 overflow-hidden ${isDark
+                ? "bg-zinc-900 border-zinc-800 hover:border-fuchsia-500"
+                : "bg-white border-zinc-200 hover:border-fuchsia-500"
+                }`}
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 blur-3xl" />
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-500 flex items-center justify-center mb-5 shadow-lg shadow-fuchsia-500/25 group-hover:scale-110 transition-transform">
+                  <Type className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Text Inside Image</h3>
+                <p className={`text-base mb-6 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+                  Fill your text with stunning images. Create eye-catching typography with photo textures inside letters.
+                </p>
+                <div className={`flex items-center gap-2 text-sm font-semibold ${isDark ? "text-fuchsia-400" : "text-fuchsia-600"} group-hover:gap-3 transition-all`}>
+                  Open Editor <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Tools Section */}
       <section id="tools" className={`py-24 px-6 ${isDark ? "bg-zinc-900/50" : "bg-zinc-50"}`}>
         <div className="max-w-6xl mx-auto">

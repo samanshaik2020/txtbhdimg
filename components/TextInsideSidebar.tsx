@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { removeBackground } from "@imgly/background-removal";
-import { useEditorStore, type TextElement, CANVAS_PRESETS, type CanvasPreset } from "@/lib/store";
+import { useTextInsideStore, type TextInsideElement, CANVAS_PRESETS, type CanvasPreset } from "@/lib/text-inside-store";
 import { useTheme } from "@/components/ThemeProvider";
 import { FONTS, getFontWeights } from "@/lib/fonts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,37 +26,37 @@ import {
     Moon,
     Sparkles,
     Upload,
-
     Eye,
     EyeOff,
     Copy,
-    ChevronDown,
-    ChevronUp,
     Undo2,
     Redo2,
     Monitor,
+    Image,
 } from "lucide-react";
 
-export function ToolSidebar() {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+export function TextInsideSidebar() {
+    const bgInputRef = useRef<HTMLInputElement>(null);
+    const fillInputRef = useRef<HTMLInputElement>(null);
     const [activeTab, setActiveTab] = useState("image");
-    const [showEffects, setShowEffects] = useState(false);
     const { theme, toggleTheme } = useTheme();
 
     const {
-        image,
+        backgroundImage,
+        backgroundColor,
+        fillImage,
         foregroundImage,
         isProcessing,
         texts,
         selectedTextId,
-        imageOpacity,
         backgroundVisible,
         foregroundVisible,
         canvasPreset,
-        setImage,
+        setBackgroundImage,
+        setBackgroundColor,
+        setFillImage,
         setForegroundImage,
         setIsProcessing,
-        setImageOpacity,
         setBackgroundVisible,
         setForegroundVisible,
         setCanvasPreset,
@@ -66,42 +66,29 @@ export function ToolSidebar() {
         duplicateText,
         setSelectedTextId,
         setTextVisible,
-
         undo,
         redo,
         reset,
-    } = useEditorStore();
+    } = useTextInsideStore();
 
     const selectedText = texts.find((t) => t.id === selectedTextId);
     const availableWeights = selectedText ? getFontWeights(selectedText.fontFamily) : [400, 700];
 
-    // Handle image upload
-    const handleImageUpload = useCallback(
-        async (e: React.ChangeEvent<HTMLInputElement>) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
+    const handleBackgroundUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-            setIsProcessing(true);
+        const imageUrl = URL.createObjectURL(file);
+        setBackgroundImage(imageUrl);
+    }, [setBackgroundImage]);
 
-            try {
-                const blob = await removeBackground(file, {
-                    progress: (key, current, total) => {
-                        console.log(`Processing ${key}: ${Math.round((current / total) * 100)}%`);
-                    },
-                });
+    const handleFillImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-                const foregroundUrl = URL.createObjectURL(blob);
-                setForegroundImage(foregroundUrl);
-            } catch (error) {
-                console.error("Background removal failed:", error);
-            } finally {
-                setIsProcessing(false);
-            }
-        },
-        [setImage, setForegroundImage, setIsProcessing]
-    );
+        const imageUrl = URL.createObjectURL(file);
+        setFillImage(imageUrl);
+    }, [setFillImage]);
 
     const handleExport = () => {
         const exportFn = (window as unknown as { exportCanvas?: () => void }).exportCanvas;
@@ -110,9 +97,9 @@ export function ToolSidebar() {
         }
     };
 
-    const updateTextProperty = <K extends keyof TextElement>(
+    const updateTextProperty = <K extends keyof TextInsideElement>(
         key: K,
-        value: TextElement[K]
+        value: TextInsideElement[K]
     ) => {
         if (selectedTextId) {
             updateText(selectedTextId, { [key]: value });
@@ -121,7 +108,6 @@ export function ToolSidebar() {
 
     const isDark = theme === "dark";
 
-    // Common styles
     const cardStyle = isDark
         ? "bg-zinc-900/50 border border-zinc-800 rounded-xl"
         : "bg-zinc-50 border border-zinc-200 rounded-xl";
@@ -134,12 +120,12 @@ export function ToolSidebar() {
             {/* Header */}
             <div className={`px-4 py-3 border-b flex items-center justify-between ${isDark ? "border-zinc-800" : "border-zinc-200"}`}>
                 <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
-                        <Sparkles className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/20">
+                        <Type className="w-4 h-4 text-white" />
                     </div>
                     <div>
                         <h1 className={`text-sm font-semibold ${isDark ? "text-white" : "text-zinc-900"}`}>
-                            Text Behind Image
+                            Text Inside Image
                         </h1>
                     </div>
                 </div>
@@ -164,7 +150,7 @@ export function ToolSidebar() {
                             { value: "image", icon: ImageIcon, label: "Image" },
                             { value: "text", icon: Type, label: "Text" },
                             { value: "layers", icon: Layers, label: "Layers" },
-                            { value: "settings", icon: Sliders, label: "Adjust" },
+                            { value: "settings", icon: Sliders, label: "Export" },
                         ].map(({ value, icon: Icon, label }) => (
                             <TabsTrigger
                                 key={value}
@@ -183,12 +169,13 @@ export function ToolSidebar() {
 
                 {/* Image Tab */}
                 <TabsContent value="image" className="flex-1 p-3 space-y-3 overflow-y-auto mt-0">
-                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    <input ref={bgInputRef} type="file" accept="image/*" onChange={handleBackgroundUpload} className="hidden" />
+                    <input ref={fillInputRef} type="file" accept="image/*" onChange={handleFillImageUpload} className="hidden" />
 
                     {/* Canvas Preset */}
                     <div className={`${cardStyle} p-3`}>
                         <div className="flex items-center gap-2 mb-2">
-                            <Monitor className="w-3.5 h-3.5 text-violet-500" />
+                            <Monitor className="w-3.5 h-3.5 text-fuchsia-500" />
                             <span className={labelStyle}>Canvas Size</span>
                         </div>
                         <select
@@ -204,52 +191,89 @@ export function ToolSidebar() {
                         </select>
                     </div>
 
-                    {!image ? (
-                        <div
-                            onClick={() => fileInputRef.current?.click()}
-                            className={`group border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${isDark ? "border-zinc-800 hover:border-violet-500/50 hover:bg-violet-500/5" : "border-zinc-300 hover:border-violet-500/50 hover:bg-violet-50"
-                                }`}
-                        >
-                            <div className={`w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-3 transition-colors ${isDark ? "bg-zinc-900 group-hover:bg-violet-500/20" : "bg-zinc-100 group-hover:bg-violet-100"
-                                }`}>
-                                <Upload className={`w-6 h-6 ${isDark ? "text-zinc-500 group-hover:text-violet-400" : "text-zinc-400 group-hover:text-violet-500"}`} />
-                            </div>
-                            <p className={`text-sm font-medium mb-1 ${isDark ? "text-white" : "text-zinc-900"}`}>Upload your image</p>
-                            <p className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>PNG, JPG, WEBP</p>
+                    {/* Background Image */}
+                    <div className={`${cardStyle} p-3`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ImageIcon className="w-3.5 h-3.5 text-fuchsia-500" />
+                            <span className={labelStyle}>Background Image</span>
                         </div>
-                    ) : (
-                        <div className="space-y-3">
-                            <div className={`relative aspect-video rounded-lg overflow-hidden ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
-                                <img src={image} alt="Preview" className="w-full h-full object-cover" />
-                                {isProcessing && (
-                                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-                                        <div className="text-center">
-                                            <Loader2 className="w-8 h-8 text-violet-500 animate-spin mx-auto" />
-                                            <p className="text-xs text-white mt-2">AI Processing...</p>
-                                        </div>
-                                    </div>
-                                )}
-                                {foregroundImage && !isProcessing && (
-                                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-emerald-500/90 text-[10px] font-medium text-white">
-                                        Ready
-                                    </div>
-                                )}
+                        {!backgroundImage ? (
+                            <div
+                                onClick={() => bgInputRef.current?.click()}
+                                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all ${isDark ? "border-zinc-800 hover:border-fuchsia-500/50" : "border-zinc-300 hover:border-fuchsia-500/50"
+                                    }`}
+                            >
+                                <Upload className={`w-8 h-8 mx-auto mb-2 ${isDark ? "text-zinc-600" : "text-zinc-400"}`} />
+                                <p className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Upload background</p>
                             </div>
-                            <div className="grid grid-cols-2 gap-2">
-                                <Button variant="outline" onClick={() => fileInputRef.current?.click()} className={`h-8 rounded-lg text-xs ${isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"}`}>
+                        ) : (
+                            <div className="space-y-2">
+                                <div className={`relative aspect-video rounded-lg overflow-hidden ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
+                                    <img src={backgroundImage} alt="Background" className="w-full h-full object-cover" />
+                                </div>
+                                <Button variant="outline" size="sm" onClick={() => bgInputRef.current?.click()} className="w-full h-8 text-xs">
                                     <ImageIcon className="w-3 h-3 mr-1" /> Replace
                                 </Button>
-                                <Button variant="outline" onClick={reset} className={`h-8 rounded-lg text-xs ${isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"}`}>
-                                    <RotateCcw className="w-3 h-3 mr-1" /> Reset
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Background Color */}
+                    <div className={`${cardStyle} p-3`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: backgroundColor }} />
+                            <span className={labelStyle}>Background Color</span>
+                        </div>
+                        <div className="flex gap-1.5 flex-wrap">
+                            {["#1a1a2e", "#16213e", "#0f3460", "#1a1a1a", "#2d3436", "#000000", "#ffffff", "#f8f9fa", "#e9ecef"].map((color) => (
+                                <button
+                                    key={color}
+                                    onClick={() => setBackgroundColor(color)}
+                                    className={`w-7 h-7 rounded-lg transition-transform hover:scale-110 ${backgroundColor === color ? "ring-2 ring-fuchsia-500 ring-offset-1" : ""}`}
+                                    style={{ backgroundColor: color, border: color === "#ffffff" || color === "#f8f9fa" || color === "#e9ecef" ? "1px solid #e4e4e7" : "none" }}
+                                />
+                            ))}
+                            <input
+                                type="color"
+                                value={backgroundColor}
+                                onChange={(e) => setBackgroundColor(e.target.value)}
+                                className="w-7 h-7 rounded-lg cursor-pointer border-0"
+                                title="Custom color"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Fill Image (for text) */}
+                    <div className={`${cardStyle} p-3`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Image className="w-3.5 h-3.5 text-pink-500" />
+                            <span className={labelStyle}>Text Fill Image</span>
+                        </div>
+                        {!fillImage ? (
+                            <div
+                                onClick={() => fillInputRef.current?.click()}
+                                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all ${isDark ? "border-zinc-800 hover:border-pink-500/50" : "border-zinc-300 hover:border-pink-500/50"
+                                    }`}
+                            >
+                                <Upload className={`w-8 h-8 mx-auto mb-2 ${isDark ? "text-zinc-600" : "text-zinc-400"}`} />
+                                <p className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Upload image for text fill</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-2">
+                                <div className={`relative aspect-video rounded-lg overflow-hidden ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
+                                    <img src={fillImage} alt="Fill" className="w-full h-full object-cover" />
+                                </div>
+                                <Button variant="outline" size="sm" onClick={() => fillInputRef.current?.click()} className="w-full h-8 text-xs">
+                                    <Image className="w-3 h-3 mr-1" /> Replace Fill
                                 </Button>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </TabsContent>
 
                 {/* Text Tab */}
                 <TabsContent value="text" className="flex-1 p-3 space-y-3 overflow-y-auto mt-0">
-                    <Button onClick={addText} className="w-full h-9 rounded-lg bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-xs font-medium" disabled={!image}>
+                    <Button onClick={addText} className="w-full h-9 rounded-lg bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-xs font-medium" disabled={!backgroundImage}>
                         <Plus className="w-3.5 h-3.5 mr-1.5" /> Add Text Layer
                     </Button>
 
@@ -272,8 +296,11 @@ export function ToolSidebar() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className={labelStyle}>Size</label>
-                                    <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} mt-1`} min={12} max={400} />
+                                    <label className={labelStyle}>Size (px)</label>
+                                    <div className="relative mt-1">
+                                        <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} pr-8`} min={12} max={400} />
+                                        <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>px</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -296,26 +323,35 @@ export function ToolSidebar() {
                                 </div>
                             </div>
 
-                            {/* Color */}
-                            <div>
-                                <label className={labelStyle}>Color</label>
-                                <div className="flex gap-1.5 mt-1 flex-wrap">
-                                    {["#ffffff", "#000000", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"].map((color) => (
-                                        <button
-                                            key={color}
-                                            onClick={() => updateTextProperty("fill", color)}
-                                            className={`w-6 h-6 rounded-md transition-transform hover:scale-110 ${selectedText.fill === color ? "ring-2 ring-violet-500 ring-offset-1" : ""}`}
-                                            style={{ backgroundColor: color, border: color === "#ffffff" ? "1px solid #e4e4e7" : "none" }}
-                                        />
-                                    ))}
-                                    <div className="relative">
-                                        <input type="color" value={selectedText.fill} onChange={(e) => updateTextProperty("fill", e.target.value)} className="absolute inset-0 w-6 h-6 opacity-0 cursor-pointer" />
-                                        <div className={`w-6 h-6 rounded-md border-2 border-dashed flex items-center justify-center ${isDark ? "border-zinc-700" : "border-zinc-300"}`}>
-                                            <Plus className="w-3 h-3 text-zinc-500" />
-                                        </div>
-                                    </div>
+                            {/* Fill Mode Toggle */}
+                            <div className={`p-2.5 rounded-lg ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-xs font-medium ${isDark ? "text-white" : "text-zinc-900"}`}>Use Image Fill</span>
+                                    <button
+                                        onClick={() => updateTextProperty("useImageFill", !selectedText.useImageFill)}
+                                        className={`w-8 h-4 rounded-full transition-colors ${selectedText.useImageFill ? "bg-fuchsia-500" : isDark ? "bg-zinc-700" : "bg-zinc-300"}`}
+                                    >
+                                        <div className={`w-3 h-3 rounded-full bg-white transition-transform ${selectedText.useImageFill ? "translate-x-4" : "translate-x-0.5"}`} />
+                                    </button>
                                 </div>
                             </div>
+
+                            {/* Color (only when not using image fill) */}
+                            {!selectedText.useImageFill && (
+                                <div>
+                                    <label className={labelStyle}>Color</label>
+                                    <div className="flex gap-1.5 mt-1 flex-wrap">
+                                        {["#ffffff", "#000000", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"].map((color) => (
+                                            <button
+                                                key={color}
+                                                onClick={() => updateTextProperty("fill", color)}
+                                                className={`w-6 h-6 rounded-md transition-transform hover:scale-110 ${selectedText.fill === color ? "ring-2 ring-fuchsia-500 ring-offset-1" : ""}`}
+                                                style={{ backgroundColor: color, border: color === "#ffffff" ? "1px solid #e4e4e7" : "none" }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Alignment */}
                             <div>
@@ -347,68 +383,10 @@ export function ToolSidebar() {
                                     <Slider value={[selectedText.lineHeight * 10]} onValueChange={([v]) => updateTextProperty("lineHeight", v / 10)} min={5} max={30} step={1} className="mt-1" />
                                 </div>
                             </div>
-
-                            {/* Effects Toggle */}
-                            <button onClick={() => setShowEffects(!showEffects)} className={`w-full flex items-center justify-between p-2 rounded-lg ${isDark ? "bg-zinc-900 hover:bg-zinc-800" : "bg-zinc-100 hover:bg-zinc-200"}`}>
-                                <span className={`text-xs font-medium ${isDark ? "text-white" : "text-zinc-900"}`}>Text Effects</span>
-                                {showEffects ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                            </button>
-
-                            {showEffects && (
-                                <div className="space-y-3 pt-2">
-                                    {/* Shadow */}
-                                    <div className={`p-2.5 rounded-lg ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className={`text-xs font-medium ${isDark ? "text-white" : "text-zinc-900"}`}>Shadow</span>
-                                            <button onClick={() => updateTextProperty("shadowEnabled", !selectedText.shadowEnabled)} className={`w-8 h-4 rounded-full transition-colors ${selectedText.shadowEnabled ? "bg-violet-500" : isDark ? "bg-zinc-700" : "bg-zinc-300"}`}>
-                                                <div className={`w-3 h-3 rounded-full bg-white transition-transform ${selectedText.shadowEnabled ? "translate-x-4" : "translate-x-0.5"}`} />
-                                            </button>
-                                        </div>
-                                        {selectedText.shadowEnabled && (
-                                            <div className="space-y-2">
-                                                <div className="flex gap-2 items-center">
-                                                    <input type="color" value={selectedText.shadowColor} onChange={(e) => updateTextProperty("shadowColor", e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
-                                                    <div className="flex-1">
-                                                        <Slider value={[selectedText.shadowBlur]} onValueChange={([v]) => updateTextProperty("shadowBlur", v)} min={0} max={50} step={1} />
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    <div>
-                                                        <label className={`${labelStyle} text-[9px]`}>X Offset</label>
-                                                        <Slider value={[selectedText.shadowOffsetX]} onValueChange={([v]) => updateTextProperty("shadowOffsetX", v)} min={-30} max={30} step={1} />
-                                                    </div>
-                                                    <div>
-                                                        <label className={`${labelStyle} text-[9px]`}>Y Offset</label>
-                                                        <Slider value={[selectedText.shadowOffsetY]} onValueChange={([v]) => updateTextProperty("shadowOffsetY", v)} min={-30} max={30} step={1} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Stroke */}
-                                    <div className={`p-2.5 rounded-lg ${isDark ? "bg-zinc-900" : "bg-zinc-100"}`}>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className={`text-xs font-medium ${isDark ? "text-white" : "text-zinc-900"}`}>Stroke</span>
-                                            <button onClick={() => updateTextProperty("strokeEnabled", !selectedText.strokeEnabled)} className={`w-8 h-4 rounded-full transition-colors ${selectedText.strokeEnabled ? "bg-violet-500" : isDark ? "bg-zinc-700" : "bg-zinc-300"}`}>
-                                                <div className={`w-3 h-3 rounded-full bg-white transition-transform ${selectedText.strokeEnabled ? "translate-x-4" : "translate-x-0.5"}`} />
-                                            </button>
-                                        </div>
-                                        {selectedText.strokeEnabled && (
-                                            <div className="flex gap-2 items-center">
-                                                <input type="color" value={selectedText.strokeColor} onChange={(e) => updateTextProperty("strokeColor", e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
-                                                <div className="flex-1">
-                                                    <Slider value={[selectedText.strokeWidth]} onValueChange={([v]) => updateTextProperty("strokeWidth", v)} min={1} max={20} step={1} />
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     )}
 
-                    {texts.length === 0 && image && (
+                    {texts.length === 0 && backgroundImage && (
                         <div className={`text-center py-6 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
                             <Type className="w-8 h-8 mx-auto mb-2 opacity-30" />
                             <p className="text-xs">No text layers yet</p>
@@ -425,10 +403,10 @@ export function ToolSidebar() {
                         <button onClick={() => setForegroundVisible(!foregroundVisible)} className="w-5 h-5 flex items-center justify-center">
                             {foregroundVisible ? <Eye className="w-3.5 h-3.5 text-emerald-500" /> : <EyeOff className="w-3.5 h-3.5 text-zinc-500" />}
                         </button>
-                        <div className="w-6 h-6 rounded bg-gradient-to-br from-violet-500/30 to-fuchsia-500/30 flex items-center justify-center">
-                            <span className="text-[10px] font-bold text-violet-400">FG</span>
+                        <div className="w-6 h-6 rounded bg-gradient-to-br from-fuchsia-500/30 to-pink-500/30 flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-fuchsia-400">FG</span>
                         </div>
-                        <span className={`text-xs flex-1 ${isDark ? "text-white" : "text-zinc-900"}`}>Foreground (Subject)</span>
+                        <span className={`text-xs flex-1 ${isDark ? "text-white" : "text-zinc-900"}`}>Foreground</span>
                     </div>
 
                     {/* Text Layers */}
@@ -437,19 +415,19 @@ export function ToolSidebar() {
                             key={text.id}
                             onClick={() => setSelectedTextId(text.id)}
                             className={`flex items-center gap-2 p-2.5 rounded-lg cursor-pointer transition-all ${text.id === selectedTextId
-                                ? isDark ? "bg-violet-500/20 ring-1 ring-violet-500/50" : "bg-violet-50 ring-1 ring-violet-500/50"
+                                ? isDark ? "bg-fuchsia-500/20 ring-1 ring-fuchsia-500/50" : "bg-fuchsia-50 ring-1 ring-fuchsia-500/50"
                                 : isDark ? "bg-zinc-900 hover:bg-zinc-800" : "bg-zinc-50 hover:bg-zinc-100"
                                 }`}
                         >
                             <button onClick={(e) => { e.stopPropagation(); setTextVisible(text.id, !text.visible); }} className="w-5 h-5 flex items-center justify-center">
                                 {text.visible ? <Eye className="w-3.5 h-3.5 text-emerald-500" /> : <EyeOff className="w-3.5 h-3.5 text-zinc-500" />}
                             </button>
-                            <div className="w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: text.fill + "30" }}>
-                                <Type className="w-3 h-3" style={{ color: text.fill }} />
+                            <div className="w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: text.useImageFill ? "#f0abfc30" : text.fill + "30" }}>
+                                <Type className="w-3 h-3" style={{ color: text.useImageFill ? "#f0abfc" : text.fill }} />
                             </div>
                             <span className={`text-xs flex-1 truncate ${isDark ? "text-white" : "text-zinc-900"}`}>{text.content || "Text"}</span>
                             <div className="flex gap-1">
-                                <button onClick={(e) => { e.stopPropagation(); duplicateText(text.id); }} className="w-5 h-5 flex items-center justify-center hover:text-violet-500">
+                                <button onClick={(e) => { e.stopPropagation(); duplicateText(text.id); }} className="w-5 h-5 flex items-center justify-center hover:text-fuchsia-500">
                                     <Copy className="w-3 h-3" />
                                 </button>
                                 <button onClick={(e) => { e.stopPropagation(); deleteText(text.id); }} className="w-5 h-5 flex items-center justify-center hover:text-red-500">
@@ -471,39 +449,26 @@ export function ToolSidebar() {
                     </div>
                 </TabsContent>
 
-                {/* Settings Tab */}
+                {/* Settings/Export Tab */}
                 <TabsContent value="settings" className="flex-1 p-3 space-y-3 overflow-y-auto mt-0">
-                    {/* Subject Opacity */}
-                    <div className={`${cardStyle} p-3`}>
-                        <div className="flex items-center gap-2 mb-2">
-                            <Layers className="w-3.5 h-3.5 text-violet-500" />
-                            <span className={labelStyle}>Subject Opacity</span>
-                            <span className={`ml-auto text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>{Math.round(imageOpacity * 100)}%</span>
-                        </div>
-                        <Slider value={[imageOpacity * 100]} onValueChange={([v]) => setImageOpacity(v / 100)} min={0} max={100} step={1} />
-                    </div>
-
-                    {/* Export */}
                     <div className={`${cardStyle} p-3`}>
                         <div className="flex items-center gap-2 mb-3">
                             <Download className="w-3.5 h-3.5 text-emerald-500" />
                             <span className={labelStyle}>Export</span>
                         </div>
-                        <Button onClick={handleExport} disabled={!image} className="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-xs font-medium">
+                        <Button onClick={handleExport} disabled={!backgroundImage} className="w-full h-9 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-xs font-medium">
                             <Download className="w-3.5 h-3.5 mr-1.5" /> Download PNG (2x)
                         </Button>
                     </div>
 
-                    {/* Tips */}
                     <div className={`${cardStyle} p-3`}>
-                        <p className={`${labelStyle} mb-2`}>Shortcuts</p>
-                        <div className={`space-y-1.5 text-[10px] ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
-                            <div className="flex justify-between"><span>Undo</span><kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Ctrl+Z</kbd></div>
-                            <div className="flex justify-between"><span>Redo</span><kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Ctrl+Shift+Z</kbd></div>
-                            <div className="flex justify-between"><span>Duplicate</span><kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Ctrl+D</kbd></div>
-                            <div className="flex justify-between"><span>Delete</span><kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Del</kbd></div>
-                            <div className="flex justify-between"><span>Move (fast)</span><kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Shift+Arrows</kbd></div>
+                        <div className="flex items-center gap-2 mb-3">
+                            <RotateCcw className="w-3.5 h-3.5 text-red-500" />
+                            <span className={labelStyle}>Reset</span>
                         </div>
+                        <Button onClick={reset} variant="outline" className="w-full h-9 rounded-lg text-xs">
+                            <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Reset All
+                        </Button>
                     </div>
                 </TabsContent>
             </Tabs>

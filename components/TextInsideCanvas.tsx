@@ -1,32 +1,35 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { Stage, Layer, Text, Transformer, Rect, Line } from "react-konva";
+import { Stage, Layer, Text, Transformer, Rect, Line, Group } from "react-konva";
 import type { Stage as StageType } from "konva/lib/Stage";
 import type { Text as TextType } from "konva/lib/shapes/Text";
 import type { Transformer as TransformerType } from "konva/lib/shapes/Transformer";
-import { useEditorStore, type TextElement } from "@/lib/store";
+import { useTextInsideStore, type TextInsideElement } from "@/lib/text-inside-store";
 import { useTheme } from "@/components/ThemeProvider";
 import { URLImage } from "./URLImage";
 
-// Snapping threshold in pixels
 const SNAP_THRESHOLD = 8;
 
-export function CanvasWorkspace() {
+export function TextInsideCanvas() {
     const containerRef = useRef<HTMLDivElement>(null);
     const stageRef = useRef<StageType>(null);
     const transformerRef = useRef<TransformerType>(null);
     const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
     const [guides, setGuides] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
+    const [fillPattern, setFillPattern] = useState<HTMLImageElement | null>(null);
     const { theme } = useTheme();
 
     const {
-        image,
+        backgroundImage,
+        backgroundColor,
+        fillImage,
         foregroundImage,
-        imageOpacity,
         backgroundVisible,
         foregroundVisible,
+        canvasWidth,
+        canvasHeight,
         texts,
         selectedTextId,
         setSelectedTextId,
@@ -37,9 +40,23 @@ export function CanvasWorkspace() {
         undo,
         redo,
         pushHistory,
-    } = useEditorStore();
+    } = useTextInsideStore();
 
     const isDark = theme === "dark";
+
+    // Load fill pattern image
+    useEffect(() => {
+        if (fillImage) {
+            const img = new window.Image();
+            img.crossOrigin = "anonymous";
+            img.src = fillImage;
+            img.onload = () => {
+                setFillPattern(img);
+            };
+        } else {
+            setFillPattern(null);
+        }
+    }, [fillImage]);
 
     // Calculate responsive stage size
     useEffect(() => {
@@ -60,17 +77,14 @@ export function CanvasWorkspace() {
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Undo: Ctrl/Cmd + Z
             if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
                 e.preventDefault();
                 undo();
             }
-            // Redo: Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y
             if ((e.ctrlKey || e.metaKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
                 e.preventDefault();
                 redo();
             }
-            // Delete selected text
             if ((e.key === "Delete" || e.key === "Backspace") && selectedTextId) {
                 const activeElement = document.activeElement;
                 if (activeElement?.tagName !== "INPUT" && activeElement?.tagName !== "TEXTAREA") {
@@ -78,12 +92,10 @@ export function CanvasWorkspace() {
                     deleteText(selectedTextId);
                 }
             }
-            // Duplicate: Ctrl/Cmd + D
             if ((e.ctrlKey || e.metaKey) && e.key === "d" && selectedTextId) {
                 e.preventDefault();
                 duplicateText(selectedTextId);
             }
-            // Arrow key movement
             if (selectedTextId && ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
                 const activeElement = document.activeElement;
                 if (activeElement?.tagName !== "INPUT" && activeElement?.tagName !== "TEXTAREA") {
@@ -108,7 +120,7 @@ export function CanvasWorkspace() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [selectedTextId, texts, undo, redo, deleteText, duplicateText, updateText]);
 
-    // Handle image load to get natural dimensions
+    // Handle image load
     const handleImageLoad = useCallback((img: HTMLImageElement) => {
         const { width: containerWidth, height: containerHeight } = stageSize;
         const padding = 40;
@@ -131,7 +143,7 @@ export function CanvasWorkspace() {
         setCanvasDimensions(newWidth, newHeight);
     }, [stageSize, setCanvasDimensions]);
 
-    // Attach transformer to selected text
+    // Attach transformer
     useEffect(() => {
         if (!transformerRef.current || !stageRef.current) return;
 
@@ -150,18 +162,18 @@ export function CanvasWorkspace() {
         }
     }, [selectedTextId, texts]);
 
-    // Click on stage background to deselect
     const handleStageClick = (e: { target: { getStage: () => StageType | null } }) => {
         if (e.target === e.target.getStage()) {
             setSelectedTextId(null);
         }
     };
 
-    // Calculate image position to center it
-    const imageX = (stageSize.width - imageSize.width) / 2;
-    const imageY = (stageSize.height - imageSize.height) / 2;
+    // Use imageSize if available, otherwise calculate from canvasWidth/Height
+    const effectiveWidth = imageSize.width || canvasWidth * 0.8;
+    const effectiveHeight = imageSize.height || canvasHeight * 0.8;
+    const imageX = (stageSize.width - effectiveWidth) / 2;
+    const imageY = (stageSize.height - effectiveHeight) / 2;
 
-    // Calculate snapping guides
     const handleDrag = (textId: string, node: TextType) => {
         const x = node.x();
         const y = node.y();
@@ -171,19 +183,17 @@ export function CanvasWorkspace() {
         const centerX = x + width / 2;
         const centerY = y + height / 2;
 
-        const canvasCenterX = imageX + imageSize.width / 2;
-        const canvasCenterY = imageY + imageSize.height / 2;
+        const canvasCenterX = imageX + effectiveWidth / 2;
+        const canvasCenterY = imageY + effectiveHeight / 2;
 
         let snapX: number | null = null;
         let snapY: number | null = null;
 
-        // Snap to center X
         if (Math.abs(centerX - canvasCenterX) < SNAP_THRESHOLD) {
             node.x(canvasCenterX - width / 2);
             snapX = canvasCenterX;
         }
 
-        // Snap to center Y
         if (Math.abs(centerY - canvasCenterY) < SNAP_THRESHOLD) {
             node.y(canvasCenterY - height / 2);
             snapY = canvasCenterY;
@@ -201,9 +211,9 @@ export function CanvasWorkspace() {
         setGuides({ x: null, y: null });
     };
 
-    // Export canvas as image
+    // Export canvas
     const exportCanvas = useCallback(() => {
-        if (!stageRef.current || !image) return;
+        if (!stageRef.current || (!backgroundImage && !backgroundColor)) return;
 
         if (transformerRef.current) {
             transformerRef.current.hide();
@@ -214,8 +224,8 @@ export function CanvasWorkspace() {
             pixelRatio: 2,
             x: imageX,
             y: imageY,
-            width: imageSize.width,
-            height: imageSize.height,
+            width: effectiveWidth,
+            height: effectiveHeight,
         });
 
         if (transformerRef.current) {
@@ -223,10 +233,10 @@ export function CanvasWorkspace() {
         }
 
         const link = document.createElement("a");
-        link.download = "text-behind-image.png";
+        link.download = "text-inside-image.png";
         link.href = dataUrl;
         link.click();
-    }, [image, imageX, imageY, imageSize]);
+    }, [backgroundImage, backgroundColor, imageX, imageY, effectiveWidth, effectiveHeight]);
 
     useEffect(() => {
         (window as unknown as { exportCanvas: () => void }).exportCanvas = exportCanvas;
@@ -234,17 +244,6 @@ export function CanvasWorkspace() {
 
     const checkerColor1 = isDark ? "#1a1a1a" : "#f0f0f0";
     const checkerColor2 = isDark ? "#252525" : "#e0e0e0";
-
-    // Get text shadow/stroke config for Konva
-    const getTextConfig = (text: TextElement) => ({
-        shadowColor: text.shadowEnabled ? text.shadowColor : undefined,
-        shadowBlur: text.shadowEnabled ? text.shadowBlur : 0,
-        shadowOffsetX: text.shadowEnabled ? text.shadowOffsetX : 0,
-        shadowOffsetY: text.shadowEnabled ? text.shadowOffsetY : 0,
-        shadowOpacity: text.shadowEnabled ? 1 : 0,
-        stroke: text.strokeEnabled ? text.strokeColor : undefined,
-        strokeWidth: text.strokeEnabled ? text.strokeWidth : 0,
-    });
 
     return (
         <div
@@ -271,14 +270,14 @@ export function CanvasWorkspace() {
                 onTap={handleStageClick}
             >
                 <Layer>
-                    {/* Canvas background */}
-                    {image && (
+                    {/* Canvas background rectangle */}
+                    {(backgroundImage || backgroundColor) && (
                         <Rect
                             x={imageX}
                             y={imageY}
-                            width={imageSize.width}
-                            height={imageSize.height}
-                            fill="#000"
+                            width={effectiveWidth}
+                            height={effectiveHeight}
+                            fill={backgroundImage ? "#000" : backgroundColor}
                             cornerRadius={8}
                             shadowColor="rgba(0,0,0,0.4)"
                             shadowBlur={40}
@@ -287,10 +286,10 @@ export function CanvasWorkspace() {
                         />
                     )}
 
-                    {/* Layer 1: Background image */}
-                    {image && backgroundVisible && (
+                    {/* Background image */}
+                    {backgroundImage && backgroundVisible && (
                         <URLImage
-                            src={image}
+                            src={backgroundImage}
                             x={imageX}
                             y={imageY}
                             width={imageSize.width}
@@ -299,7 +298,7 @@ export function CanvasWorkspace() {
                         />
                     )}
 
-                    {/* Layer 2: Text elements */}
+                    {/* Text elements with image fill pattern */}
                     {texts.filter(t => t.visible).map((text) => (
                         <Text
                             key={text.id}
@@ -310,7 +309,10 @@ export function CanvasWorkspace() {
                             fontSize={text.fontSize}
                             fontFamily={text.fontFamily}
                             fontStyle={`${text.fontStyle}${text.fontWeight >= 600 ? " bold" : ""}`}
-                            fill={text.fill}
+                            fill={text.useImageFill && fillPattern ? undefined : text.fill}
+                            fillPatternImage={text.useImageFill ? fillPattern || undefined : undefined}
+                            fillPatternRepeat="no-repeat"
+                            fillPatternScale={{ x: 0.5, y: 0.5 }}
                             align={text.align}
                             letterSpacing={text.letterSpacing}
                             lineHeight={text.lineHeight}
@@ -318,7 +320,6 @@ export function CanvasWorkspace() {
                             scaleX={text.scaleX}
                             scaleY={text.scaleY}
                             draggable
-                            {...getTextConfig(text)}
                             onClick={() => setSelectedTextId(text.id)}
                             onTap={() => setSelectedTextId(text.id)}
                             onDragMove={(e) => handleDrag(text.id, e.target as TextType)}
@@ -337,7 +338,7 @@ export function CanvasWorkspace() {
                         />
                     ))}
 
-                    {/* Layer 3: Foreground */}
+                    {/* Foreground layer */}
                     {foregroundImage && foregroundVisible && (
                         <URLImage
                             src={foregroundImage}
@@ -345,7 +346,6 @@ export function CanvasWorkspace() {
                             y={imageY}
                             width={imageSize.width}
                             height={imageSize.height}
-                            opacity={imageOpacity}
                             listening={false}
                         />
                     )}
@@ -353,7 +353,7 @@ export function CanvasWorkspace() {
                     {/* Snapping guides */}
                     {guides.x !== null && (
                         <Line
-                            points={[guides.x, imageY, guides.x, imageY + imageSize.height]}
+                            points={[guides.x, imageY, guides.x, imageY + effectiveHeight]}
                             stroke="#8b5cf6"
                             strokeWidth={1}
                             dash={[4, 4]}
@@ -361,7 +361,7 @@ export function CanvasWorkspace() {
                     )}
                     {guides.y !== null && (
                         <Line
-                            points={[imageX, guides.y, imageX + imageSize.width, guides.y]}
+                            points={[imageX, guides.y, imageX + effectiveWidth, guides.y]}
                             stroke="#8b5cf6"
                             strokeWidth={1}
                             dash={[4, 4]}
@@ -395,7 +395,7 @@ export function CanvasWorkspace() {
             </Stage>
 
             {/* Empty state */}
-            {!image && (
+            {!backgroundImage && !backgroundColor && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className={`text-center max-w-xs px-8 py-10 rounded-3xl ${isDark ? "bg-zinc-900/80" : "bg-white/80"
                         } backdrop-blur-sm`}>
@@ -416,16 +416,16 @@ export function CanvasWorkspace() {
                             </svg>
                         </div>
                         <p className={`text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-zinc-900"}`}>
-                            Upload an image
+                            Set a background
                         </p>
                         <p className={`text-sm ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>
-                            Your text will magically appear behind the subject
+                            Upload an image or choose a color
                         </p>
                     </div>
                 </div>
             )}
 
-            {/* Keyboard shortcuts hint - hidden on mobile */}
+            {/* Keyboard hints */}
             <div className={`absolute bottom-4 left-4 text-xs hidden md:block ${isDark ? "text-zinc-600" : "text-zinc-400"
                 }`}>
                 <span className="opacity-60">Ctrl+Z: Undo • Ctrl+D: Duplicate • Del: Delete</span>
