@@ -205,6 +205,7 @@ export default function RootLayout({
         />
 
         {/* Additional SEO Meta Tags */}
+        <meta name="google-adsense-account" content="ca-pub-9833112183659445" />
         <meta name="theme-color" content="#7c3aed" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
