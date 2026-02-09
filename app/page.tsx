@@ -399,75 +399,101 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+      <section className="relative pt-20 pb-20 px-6 overflow-hidden">
         <AnimatedBackground />
         <AnimatedGrid />
 
         <div className="max-w-7xl mx-auto relative z-10">
+          {/* Hero Image Container with Overlaid Content */}
           <motion.div
-            className="text-center max-w-5xl mx-auto mb-12"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            className="relative w-full"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            {/* SVG Animated Text Headline */}
-            <AnimatedHeroTitle isDark={isDark} />
+            {/* Hero Image with Text Overlay */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+              <div className="relative aspect-[16/10] md:aspect-[16/9]">
+                <Image
+                  src="/hero-image-new.png"
+                  alt="Text Behind Image Hero"
+                  fill
+                  className="object-cover"
+                  priority
+                />
 
-            {/* Tagline */}
-            <motion.p
-              className={`text-2xl md:text-3xl mb-12 font-medium ${isDark ? "text-zinc-400" : "text-zinc-600"}`}
-              variants={itemVariants}
-            >
-              AI-powered tools to make your text stand out
-            </motion.p>
+                {/* Gradient Overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
 
-            {/* Dual CTA Buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-              variants={itemVariants}
-            >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/editor"
-                  className="group px-10 py-5 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold text-lg transition-all shadow-lg shadow-violet-500/30 flex items-center gap-2"
-                >
-                  <Layers className="w-5 h-5" />
-                  Text Behind Image
+                {/* Overlaid Text and Buttons */}
+                <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 md:pb-16 px-6 md:px-12">
+
+                  {/* CTA Buttons */}
                   <motion.div
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.9 }}
                   >
-                    <ArrowRight className="w-5 h-5" />
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link
+                        href="/editor"
+                        className="group px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-violet-500/50 flex items-center gap-2"
+                      >
+                        <Layers className="w-5 h-5" />
+                        Get Started
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        >
+                          <ArrowRight className="w-5 h-5" />
+                        </motion.div>
+                      </Link>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link
+                        href="/editor/text-inside"
+                        className="group px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 text-white font-bold text-base md:text-lg transition-all shadow-lg flex items-center gap-2"
+                      >
+                        <Type className="w-5 h-5" />
+                        Text Inside
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                        >
+                          <ArrowRight className="w-5 h-5" />
+                        </motion.div>
+                      </Link>
+                    </motion.div>
                   </motion.div>
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/editor/text-inside"
-                  className="group px-10 py-5 rounded-full bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 text-white font-bold text-lg transition-all shadow-lg shadow-fuchsia-500/30 flex items-center gap-2"
-                >
-                  <Type className="w-5 h-5" />
-                  Text Inside Image
-                  <motion.div
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.div>
-                </Link>
-              </motion.div>
-            </motion.div>
 
-            {/* Feature Badges */}
+                  {/* Bottom Text */}
+                  <motion.p
+                    className="text-white/80 text-xs md:text-sm font-medium tracking-widest uppercase"
+                    style={{
+                      textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 1.1 }}
+                  >
+                    Select from 35+ Google Fonts • AI-Powered • 100% Free
+                  </motion.p>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature Badges Below Image */}
             <motion.div
-              className={`flex flex-wrap items-center justify-center gap-6 mt-12 text-sm ${isDark ? "text-zinc-500" : "text-zinc-500"}`}
-              variants={containerVariants}
+              className={`flex flex-wrap items-center justify-center gap-6 mt-8 text-sm ${isDark ? "text-zinc-400" : "text-zinc-600"}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.3 }}
             >
-              {["No Sign-Up", "100% Free", "AI-Powered", "Instant Results"].map((badge, i) => (
+              {["No Sign-Up Required", "Instant Export", "AI Background Removal", "High Quality"].map((badge, i) => (
                 <motion.span
                   key={badge}
                   className="flex items-center gap-2"
-                  variants={itemVariants}
                   whileHover={{ scale: 1.1, y: -2 }}
                 >
                   <motion.div
