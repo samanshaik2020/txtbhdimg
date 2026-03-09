@@ -24,6 +24,9 @@ const tools = [
     href: "/tools/compress",
     color: "from-cyan-500 to-blue-500",
     label: "Optimize",
+    image: "/Compress Image.jpeg",
+    imageAlt: "Reference preview for the compress image tool",
+    howItWorks: "Upload an image, tune compression, and export a smaller file in a few clicks.",
   },
   {
     icon: ImageMinus,
@@ -32,6 +35,9 @@ const tools = [
     href: "/tools/remove-background",
     color: "from-emerald-500 to-teal-500",
     label: "AI Assist",
+    image: "/Remove Background.jpeg",
+    imageAlt: "Reference preview for the remove background tool",
+    howItWorks: "Pick your photo, let AI isolate the subject, then download a clean transparent cutout.",
   },
   {
     icon: Maximize2,
@@ -40,6 +46,9 @@ const tools = [
     href: "/tools/resize",
     color: "from-orange-500 to-amber-500",
     label: "Resize",
+    image: "/Resize Image.jpeg",
+    imageAlt: "Reference preview for the resize image tool",
+    howItWorks: "Choose your target size, preview the frame, and export with the new dimensions.",
   },
   {
     icon: Scissors,
@@ -48,6 +57,9 @@ const tools = [
     href: "/tools/crop",
     color: "from-rose-500 to-pink-500",
     label: "Frame",
+    image: "/Crop Image.jpeg",
+    imageAlt: "Reference preview for the crop image tool",
+    howItWorks: "Drag the crop area to focus the composition and save only the part you need.",
   },
   {
     icon: RotateCw,
@@ -56,6 +68,9 @@ const tools = [
     href: "/tools/rotate",
     color: "from-indigo-500 to-sky-500",
     label: "Adjust",
+    image: "/Rotate Image.jpeg",
+    imageAlt: "Reference preview for the rotate image tool",
+    howItWorks: "Rotate or flip the image until the angle looks right, then export the corrected version.",
   },
   {
     icon: FileType,
@@ -64,6 +79,9 @@ const tools = [
     href: "/tools/convert",
     color: "from-lime-500 to-emerald-500",
     label: "Export",
+    image: "/Convert Format.jpeg",
+    imageAlt: "Reference preview for the convert format tool",
+    howItWorks: "Upload once, choose the file type you need, and download the converted asset.",
   },
 ];
 
@@ -88,8 +106,8 @@ const showcaseImages = [
   },
 ];
 
-const headingFont = { fontFamily: "\"Space Grotesk\", var(--font-geist-sans), sans-serif" };
-const bodyFont = { fontFamily: "\"Poppins\", var(--font-geist-sans), sans-serif" };
+const headingFont = { fontFamily: '"Space Grotesk", var(--font-geist-sans), sans-serif' };
+const bodyFont = { fontFamily: '"Poppins", var(--font-geist-sans), sans-serif' };
 
 export default function LandingPage() {
   return (
@@ -115,11 +133,11 @@ export default function LandingPage() {
             <a href="#showcase" className="transition hover:text-white">
               Showcase
             </a>
-            <a href="#features" className="transition hover:text-white">
-              Features
-            </a>
             <a href="#tools" className="transition hover:text-white">
               Tools
+            </a>
+            <a href="#features" className="transition hover:text-white">
+              Features
             </a>
             <Link href="/blog" className="transition hover:text-white">
               Blog
@@ -131,7 +149,6 @@ export default function LandingPage() {
       <section className="relative px-5 pb-16 pt-14 sm:px-7 sm:pt-20">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-
             <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl" style={headingFont}>
               Create scroll-stopping posters with{" "}
               <span className="bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
@@ -328,59 +345,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="features" className="px-5 py-16 sm:px-7">
-        <div className="mx-auto w-full max-w-7xl">
-          <div className="mb-10 text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-emerald-200" style={bodyFont}>
-              Why Teams Use It
-            </p>
-            <h2 className="mt-3 text-3xl font-semibold sm:text-4xl" style={headingFont}>
-              Fast output. Strong visuals. No design friction.
-            </h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {[
-              {
-                icon: Wand2,
-                title: "AI Foreground Detection",
-                description: "Keep people, products, and vehicles cleanly separated from text layers.",
-                color: "from-cyan-500 to-blue-500",
-              },
-              {
-                icon: Type,
-                title: "Advanced Type Styling",
-                description: "Tune font, weight, spacing, opacity, and layering in a precise visual canvas.",
-                color: "from-amber-500 to-orange-500",
-              },
-              {
-                icon: Zap,
-                title: "Export in Seconds",
-                description: "Generate high-quality assets quickly, directly from your browser workflow.",
-                color: "from-emerald-500 to-teal-500",
-              },
-            ].map((feature) => (
-              <article
-                key={feature.title}
-                className="rounded-3xl border border-white/15 bg-slate-900/70 p-6 transition hover:border-white/30"
-              >
-                <div
-                  className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color}`}
-                >
-                  <feature.icon className="h-6 w-6 text-slate-950" />
-                </div>
-                <h3 className="text-xl font-semibold" style={headingFont}>
-                  {feature.title}
-                </h3>
-                <p className="mt-2 text-sm text-slate-300" style={bodyFont}>
-                  {feature.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section id="tools" className="border-t border-white/10 bg-slate-900/40 px-5 py-16 sm:px-7">
         <div className="mx-auto w-full max-w-7xl">
           <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -450,33 +414,60 @@ export default function LandingPage() {
                 <Link
                   key={tool.title}
                   href={tool.href}
-                  className="group flex min-h-[220px] flex-col rounded-[24px] border border-white/15 bg-slate-950/75 p-5 transition duration-200 hover:-translate-y-0.5 hover:border-white/30 hover:bg-slate-900"
+                  className="group flex min-h-[320px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-slate-950/75 transition duration-200 hover:-translate-y-0.5 hover:border-white/30 hover:bg-slate-900"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <span
-                      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tool.color}`}
-                    >
-                      <tool.icon className="h-5 w-5 text-slate-950" />
-                    </span>
-                    <span
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-slate-400"
-                      style={bodyFont}
-                    >
-                      {tool.label}
-                    </span>
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={tool.image}
+                      alt={tool.imageAlt}
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-4">
+                      <p
+                        className="inline-flex rounded-full border border-white/10 bg-slate-950/80 px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-cyan-200"
+                        style={bodyFont}
+                      >
+                        Reference image
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="mt-6 flex-1">
-                    <h3 className="text-xl font-semibold" style={headingFont}>
-                      {tool.title}
-                    </h3>
-                    <p className="mt-2 max-w-[28ch] text-sm leading-6 text-slate-300" style={bodyFont}>
-                      {tool.description}
-                    </p>
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <span
+                        className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tool.color}`}
+                      >
+                        <tool.icon className="h-5 w-5 text-slate-950" />
+                      </span>
+                      <span
+                        className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-slate-400"
+                        style={bodyFont}
+                      >
+                        {tool.label}
+                      </span>
+                    </div>
+
+                    <div className="mt-6 flex-1">
+                      <h3 className="text-xl font-semibold" style={headingFont}>
+                        {tool.title}
+                      </h3>
+                      <p className="mt-2 max-w-[28ch] text-sm leading-6 text-slate-300" style={bodyFont}>
+                        {tool.description}
+                      </p>
+                      <p
+                        className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm leading-6 text-slate-200"
+                        style={bodyFont}
+                      >
+                        <span className="mr-2 text-cyan-200">How it works:</span>
+                        {tool.howItWorks}
+                      </p>
+                    </div>
                   </div>
 
                   <span
-                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-cyan-200 transition group-hover:gap-2 group-hover:text-cyan-100"
+                    className="inline-flex items-center gap-1 px-5 pb-5 text-sm font-semibold text-cyan-200 transition group-hover:gap-2 group-hover:text-cyan-100"
                     style={bodyFont}
                   >
                     Try tool <ArrowRight className="h-4 w-4" />
@@ -484,6 +475,59 @@ export default function LandingPage() {
                 </Link>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" className="px-5 py-16 sm:px-7">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="mb-10 text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-emerald-200" style={bodyFont}>
+              Why Teams Use It
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold sm:text-4xl" style={headingFont}>
+              Fast output. Strong visuals. No design friction.
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              {
+                icon: Wand2,
+                title: "AI Foreground Detection",
+                description: "Keep people, products, and vehicles cleanly separated from text layers.",
+                color: "from-cyan-500 to-blue-500",
+              },
+              {
+                icon: Type,
+                title: "Advanced Type Styling",
+                description: "Tune font, weight, spacing, opacity, and layering in a precise visual canvas.",
+                color: "from-amber-500 to-orange-500",
+              },
+              {
+                icon: Zap,
+                title: "Export in Seconds",
+                description: "Generate high-quality assets quickly, directly from your browser workflow.",
+                color: "from-emerald-500 to-teal-500",
+              },
+            ].map((feature) => (
+              <article
+                key={feature.title}
+                className="rounded-3xl border border-white/15 bg-slate-900/70 p-6 transition hover:border-white/30"
+              >
+                <div
+                  className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color}`}
+                >
+                  <feature.icon className="h-6 w-6 text-slate-950" />
+                </div>
+                <h3 className="text-xl font-semibold" style={headingFont}>
+                  {feature.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-300" style={bodyFont}>
+                  {feature.description}
+                </p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -501,5 +545,4 @@ export default function LandingPage() {
     </main>
   );
 }
-
 
