@@ -273,7 +273,7 @@ export function ToolSidebar() {
                                 </div>
                                 <div>
                                     <label className={labelStyle}>Size</label>
-                                    <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} mt-1`} min={12} max={400} />
+                                    <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} mt-1`} min={12} max={2000} />
                                 </div>
                             </div>
 

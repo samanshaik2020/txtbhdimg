@@ -298,7 +298,7 @@ export function TextInsideSidebar() {
                                 <div>
                                     <label className={labelStyle}>Size (px)</label>
                                     <div className="relative mt-1">
-                                        <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} pr-8`} min={12} max={400} />
+                                        <Input type="number" value={selectedText.fontSize} onChange={(e) => updateTextProperty("fontSize", Number(e.target.value))} className={`${inputStyle} pr-8`} min={12} max={2000} />
                                         <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>px</span>
                                     </div>
                                 </div>

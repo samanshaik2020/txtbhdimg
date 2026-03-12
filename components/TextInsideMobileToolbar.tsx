@@ -260,7 +260,7 @@ export function TextInsideMobileToolbar() {
                                             className={`w-full h-12 px-4 pr-10 rounded-xl text-base ${isDark ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"
                                                 } border`}
                                             min={12}
-                                            max={400}
+                                            max={2000}
                                         />
                                         <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>px</span>
                                     </div>

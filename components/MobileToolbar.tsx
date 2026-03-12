@@ -277,7 +277,7 @@ export function MobileToolbar() {
                                         className={`w-full h-12 px-4 rounded-xl text-base ${isDark ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"
                                             } border`}
                                         min={12}
-                                        max={400}
+                                        max={2000}
                                     />
                                 </div>
                                 <div>
