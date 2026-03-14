@@ -225,12 +225,12 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-white/15 bg-slate-900/90 p-4 shadow-2xl lg:block">
+            <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-white/15 bg-slate-900/90 p-5 shadow-2xl lg:block">
               <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-200/90" style={bodyFont}>
                 Text inside preview
               </p>
               <p
-                className="mt-1 text-4xl font-bold leading-none tracking-tight text-transparent"
+                className="mt-2 text-6xl font-bold leading-none tracking-tight text-transparent"
                 style={{
                   ...headingFont,
                   backgroundImage: "url('/text-behind-image%20(8).png')",
@@ -247,7 +247,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="showcase" className="border-y border-white/10 bg-slate-900/40 px-5 py-16 sm:px-7">
+      <section className="border-y border-white/10 bg-slate-900/40 px-5 py-16 sm:px-7">
         <div className="mx-auto w-full max-w-7xl">
           <div className="mb-10 max-w-3xl">
             <p className="text-xs uppercase tracking-[0.2em] text-cyan-200" style={bodyFont}>
@@ -292,9 +292,9 @@ export default function LandingPage() {
               <h3 className="mt-2 text-2xl font-semibold" style={headingFont}>
                 Fill typography with image texture for premium title treatments.
               </h3>
-              <div className="mt-6 rounded-2xl border border-white/15 bg-gradient-to-br from-slate-900 to-slate-800 p-6">
+              <div className="mt-6 rounded-2xl border border-white/15 bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-8 sm:px-6 sm:py-10">
                 <p
-                  className="text-center text-6xl font-bold leading-none text-transparent sm:text-7xl"
+                  className="text-center text-[clamp(4.75rem,13vw,9rem)] font-bold leading-none tracking-tight text-transparent"
                   style={{
                     ...headingFont,
                     backgroundImage: "url('/hero-image-new.png')",
@@ -319,28 +319,6 @@ export default function LandingPage() {
                 Open text inside tool <ArrowRight className="h-4 w-4" />
               </Link>
             </article>
-          </div>
-
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
-            {showcaseImages.map((item) => (
-              <article
-                key={item.src}
-                className="overflow-hidden rounded-[24px] border border-white/15 bg-slate-950/70 transition hover:border-white/25"
-              >
-                <div className="relative aspect-[4/5]">
-                  <Image src={item.src} alt={item.alt} fill className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent" />
-                </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold" style={headingFont}>
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300" style={bodyFont}>
-                    {item.description}
-                  </p>
-                </div>
-              </article>
-            ))}
           </div>
         </div>
       </section>
@@ -372,109 +350,109 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-12">
-            <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-slate-950/90 p-6 sm:p-7 lg:col-span-5">
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
-              <div className="absolute -right-16 top-10 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
-              <div className="absolute -bottom-10 -left-8 h-28 w-28 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-slate-950/90 p-6 sm:p-7">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
+            <div className="absolute -right-16 top-10 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
+            <div className="absolute -bottom-10 left-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-3xl" />
 
-              <div className="relative">
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
                 <p className="text-xs uppercase tracking-[0.18em] text-cyan-200" style={bodyFont}>
                   Toolkit overview
                 </p>
-                <h3 className="mt-3 max-w-sm text-2xl font-semibold leading-tight" style={headingFont}>
+                <h3 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl" style={headingFont}>
                   Polish, resize, convert, and prep the final asset without breaking flow.
                 </h3>
-                <p className="mt-3 max-w-md text-sm text-slate-300" style={bodyFont}>
+                <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base" style={bodyFont}>
                   The support tools are grouped to feel like a real workflow layer around the main text effects editor,
                   so the section reads more like a product and less like a generic feature grid.
                 </p>
-
-                <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                  {[
-                    "Fast cards with cleaner spacing",
-                    "Balanced layout for wide screens",
-                    "Better hierarchy for scanning",
-                    "Stronger visual contrast and rhythm",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-200"
-                      style={bodyFont}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
               </div>
-            </div>
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:col-span-7">
-              {tools.map((tool) => (
-                <Link
-                  key={tool.title}
-                  href={tool.href}
-                  className="group flex min-h-[320px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-slate-950/75 transition duration-200 hover:-translate-y-0.5 hover:border-white/30 hover:bg-slate-900"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
-                      src={tool.image}
-                      alt={tool.imageAlt}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-[1.03]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-4">
-                      <p
-                        className="inline-flex rounded-full border border-white/10 bg-slate-950/80 px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-cyan-200"
-                        style={bodyFont}
-                      >
-                        Reference image
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <span
-                        className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tool.color}`}
-                      >
-                        <tool.icon className="h-5 w-5 text-slate-950" />
-                      </span>
-                      <span
-                        className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-slate-400"
-                        style={bodyFont}
-                      >
-                        {tool.label}
-                      </span>
-                    </div>
-
-                    <div className="mt-6 flex-1">
-                      <h3 className="text-xl font-semibold" style={headingFont}>
-                        {tool.title}
-                      </h3>
-                      <p className="mt-2 max-w-[28ch] text-sm leading-6 text-slate-300" style={bodyFont}>
-                        {tool.description}
-                      </p>
-                      <p
-                        className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm leading-6 text-slate-200"
-                        style={bodyFont}
-                      >
-                        <span className="mr-2 text-cyan-200">How it works:</span>
-                        {tool.howItWorks}
-                      </p>
-                    </div>
-                  </div>
-
-                  <span
-                    className="inline-flex items-center gap-1 px-5 pb-5 text-sm font-semibold text-cyan-200 transition group-hover:gap-2 group-hover:text-cyan-100"
+              <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[420px]">
+                {[
+                  "Fast cards with cleaner spacing",
+                  "Balanced layout for wide screens",
+                  "Better hierarchy for scanning",
+                  "Stronger visual contrast and rhythm",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-200"
                     style={bodyFont}
                   >
-                    Try tool <ArrowRight className="h-4 w-4" />
-                  </span>
-                </Link>
-              ))}
+                    {item}
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {tools.map((tool) => (
+              <Link
+                key={tool.title}
+                href={tool.href}
+                className="group flex min-h-[320px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-slate-950/75 transition duration-200 hover:-translate-y-0.5 hover:border-white/30 hover:bg-slate-900"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={tool.image}
+                    alt={tool.imageAlt}
+                    fill
+                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-4">
+                    <p
+                      className="inline-flex rounded-full border border-white/10 bg-slate-950/80 px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-cyan-200"
+                      style={bodyFont}
+                    >
+                      Reference image
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <span
+                      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${tool.color}`}
+                    >
+                      <tool.icon className="h-5 w-5 text-slate-950" />
+                    </span>
+                    <span
+                      className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-slate-400"
+                      style={bodyFont}
+                    >
+                      {tool.label}
+                    </span>
+                  </div>
+
+                  <div className="mt-6 flex-1">
+                    <h3 className="text-xl font-semibold" style={headingFont}>
+                      {tool.title}
+                    </h3>
+                    <p className="mt-2 max-w-[28ch] text-sm leading-6 text-slate-300" style={bodyFont}>
+                      {tool.description}
+                    </p>
+                    <p
+                      className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm leading-6 text-slate-200"
+                      style={bodyFont}
+                    >
+                      <span className="mr-2 text-cyan-200">How it works:</span>
+                      {tool.howItWorks}
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  className="inline-flex items-center gap-1 px-5 pb-5 text-sm font-semibold text-cyan-200 transition group-hover:gap-2 group-hover:text-cyan-100"
+                  style={bodyFont}
+                >
+                  Try tool <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -526,6 +504,41 @@ export default function LandingPage() {
                 <p className="mt-2 text-sm text-slate-300" style={bodyFont}>
                   {feature.description}
                 </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="showcase" className="border-t border-white/10 px-5 py-16 sm:px-7">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="mb-10 max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.2em] text-cyan-200" style={bodyFont}>
+              Showcase
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold sm:text-4xl" style={headingFont}>
+              Finished looks for posters, campaigns, and editorial layouts.
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {showcaseImages.map((item) => (
+              <article
+                key={item.src}
+                className="overflow-hidden rounded-[24px] border border-white/15 bg-slate-950/70 transition hover:border-white/25"
+              >
+                <div className="relative aspect-[4/5]">
+                  <Image src={item.src} alt={item.alt} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent" />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-semibold" style={headingFont}>
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300" style={bodyFont}>
+                    {item.description}
+                  </p>
+                </div>
               </article>
             ))}
           </div>
