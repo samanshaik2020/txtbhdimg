@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { BrandMark } from "@/components/BrandMark";
 import {
     ImageIcon,
     Type,
@@ -24,7 +25,6 @@ import {
     AlignRight,
     Sun,
     Moon,
-    Sparkles,
     Upload,
     Eye,
     EyeOff,
@@ -120,9 +120,7 @@ export function TextInsideSidebar() {
             {/* Header */}
             <div className={`px-4 py-3 border-b flex items-center justify-between ${isDark ? "border-zinc-800" : "border-zinc-200"}`}>
                 <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-rose-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/20">
-                        <Type className="w-4 h-4 text-white" />
-                    </div>
+                    <BrandMark className="h-8 w-8 rounded-lg" />
                     <div>
                         <h1 className={`text-sm font-semibold ${isDark ? "text-white" : "text-zinc-900"}`}>
                             Text Inside Image

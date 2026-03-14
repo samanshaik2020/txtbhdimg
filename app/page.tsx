@@ -15,6 +15,8 @@ import {
   Wand2,
   Zap,
 } from "lucide-react";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const tools = [
   {
@@ -118,38 +120,12 @@ export default function LandingPage() {
         <div className="absolute bottom-0 left-[35%] h-[300px] w-[300px] rounded-full bg-emerald-400/15 blur-[130px]" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 sm:px-7">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-emerald-400 text-slate-950">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            <span className="text-base font-semibold tracking-tight" style={headingFont}>
-              TextBehind
-            </span>
-          </Link>
-
-          <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex" style={bodyFont}>
-            <a href="#showcase" className="transition hover:text-white">
-              Showcase
-            </a>
-            <a href="#tools" className="transition hover:text-white">
-              Tools
-            </a>
-            <a href="#features" className="transition hover:text-white">
-              Features
-            </a>
-            <Link href="/blog" className="transition hover:text-white">
-              Blog
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="relative px-5 pb-16 pt-14 sm:px-7 sm:pt-20">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl" style={headingFont}>
+            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl" style={headingFont}>
               Create scroll-stopping posters with{" "}
               <span className="bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
                 text behind image
@@ -212,15 +188,15 @@ export default function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
             </div>
 
-            <div className="absolute -left-5 -top-5 hidden max-w-[230px] rounded-2xl border border-white/15 bg-slate-900/90 p-3 shadow-2xl lg:block">
+            <div className="absolute -left-7 -top-6 hidden max-w-[270px] rounded-3xl border border-white/15 bg-slate-900/90 p-4 shadow-2xl lg:block">
               <Image
                 src="/text-behind-image (10).png"
                 alt="Text behind image sample"
-                width={280}
-                height={168}
+                width={340}
+                height={205}
                 className="rounded-xl object-cover"
               />
-              <p className="mt-2 text-xs text-slate-300" style={bodyFont}>
+              <p className="mt-3 text-sm leading-6 text-slate-300" style={bodyFont}>
                 Subject overlap handled automatically.
               </p>
             </div>
@@ -350,45 +326,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-slate-950/90 p-6 sm:p-7">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
-            <div className="absolute -right-16 top-10 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
-            <div className="absolute -bottom-10 left-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-3xl" />
-
-            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-xs uppercase tracking-[0.18em] text-cyan-200" style={bodyFont}>
-                  Toolkit overview
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl" style={headingFont}>
-                  Polish, resize, convert, and prep the final asset without breaking flow.
-                </h3>
-                <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base" style={bodyFont}>
-                  The support tools are grouped to feel like a real workflow layer around the main text effects editor,
-                  so the section reads more like a product and less like a generic feature grid.
-                </p>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[420px]">
-                {[
-                  "Fast cards with cleaner spacing",
-                  "Balanced layout for wide screens",
-                  "Better hierarchy for scanning",
-                  "Stronger visual contrast and rhythm",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-200"
-                    style={bodyFont}
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {tools.map((tool) => (
               <Link
                 key={tool.title}
@@ -453,6 +391,44 @@ export default function LandingPage() {
                 </span>
               </Link>
             ))}
+          </div>
+
+          <div className="relative mt-8 overflow-hidden rounded-[28px] border border-white/15 bg-slate-950/90 p-6 sm:p-7">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
+            <div className="absolute -right-16 top-10 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
+            <div className="absolute -bottom-10 left-1/3 h-28 w-28 rounded-full bg-emerald-400/10 blur-3xl" />
+
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xs uppercase tracking-[0.18em] text-cyan-200" style={bodyFont}>
+                  Toolkit overview
+                </p>
+                <h3 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl" style={headingFont}>
+                  Polish, resize, convert, and prep the final asset without breaking flow.
+                </h3>
+                <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base" style={bodyFont}>
+                  The support tools are grouped to feel like a real workflow layer around the main text effects editor,
+                  so the section reads more like a product and less like a generic feature grid.
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[420px]">
+                {[
+                  "Fast cards with cleaner spacing",
+                  "Balanced layout for wide screens",
+                  "Better hierarchy for scanning",
+                  "Stronger visual contrast and rhythm",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-200"
+                    style={bodyFont}
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -545,16 +521,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 px-5 py-10 text-slate-400 sm:px-7">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-          <p className="text-sm" style={bodyFont}>
-            TextBehindImage.in
-          </p>
-          <p className="text-sm" style={bodyFont}>
-            Build standout designs with text behind and text inside effects.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

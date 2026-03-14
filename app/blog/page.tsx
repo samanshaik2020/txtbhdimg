@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { BrandMark } from "@/components/BrandMark";
 import {
     Search,
     Calendar,
     Clock,
     ArrowRight,
-    Sparkles,
     Instagram,
     Twitter,
     Moon,
@@ -53,9 +53,7 @@ export default function BlogListingPage() {
             <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-xl ${isDark ? "bg-zinc-950/80 border-zinc-800" : "bg-white/80 border-zinc-200"}`}>
                 <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-                            <Sparkles className="w-4 h-4 text-white" />
-                        </div>
+                        <BrandMark className="h-8 w-8 rounded-lg" />
                         <span className="font-bold text-lg">Text-Behind-Image</span>
                     </Link>
                     <div className="flex items-center gap-6">
@@ -167,9 +165,7 @@ export default function BlogListingPage() {
                     <div className="grid md:grid-cols-2 gap-12 mb-16">
                         <div>
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-                                    <Sparkles className="w-4 h-4 text-white" />
-                                </div>
+                                <BrandMark className="h-8 w-8 rounded-lg" />
                                 <span className="font-bold text-xl">Text Behind Image</span>
                             </div>
                             <p className={`text-sm max-w-sm mb-6 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
